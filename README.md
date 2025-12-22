@@ -1,12 +1,3 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
-
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
-
 ## Project Setup
 
 ### Prerequisites
@@ -62,14 +53,25 @@ Before you begin, ensure you have the following installed on your system:
    ```
 
    For **MySQL** or **PostgreSQL**, update your `.env` file:
-
+    
    ```env
+   # for mysql
    DB_CONNECTION=mysql
    DB_HOST=127.0.0.1
    DB_PORT=3306
    DB_DATABASE=your_database_name
-   DB_USERNAME=your_username
-   DB_PASSWORD=your_password
+   DB_USERNAME=postgres
+   DB_PASSWORD=postgres
+   ```
+
+   ```env
+   # for postgresql
+   DB_CONNECTION=pgsql
+   DB_HOST=127.0.0.1
+   DB_PORT=5432
+   DB_DATABASE=your_database_name
+   DB_USERNAME=postgres
+   DB_PASSWORD=postgres
    ```
 
 6. **Run database migrations**:
@@ -77,12 +79,38 @@ Before you begin, ensure you have the following installed on your system:
    php artisan migrate
    ```
 
-7. **Install Node.js dependencies**:
+7. **Create a test user** (optional but recommended for testing):
+
+   You can create a user using PHP Tinker:
+
+   ```bash
+   php artisan tinker
+   ```
+
+   Then run the following command in the Tinker console:
+
+   ```php
+   User::create([
+       'name' => 'Test User',
+       'email' => 'test@example.com',
+       'password' => Hash::make('password')
+   ]);
+   ```
+
+   Or create a user in a single command:
+
+   ```bash
+   php artisan tinker --execute="User::create(['name' => 'Test User', 'email' => 'test@example.com', 'password' => Hash::make('password')]);"
+   ```
+
+   Exit Tinker by typing `exit` or pressing `Ctrl+D`.
+
+8. **Install Node.js dependencies**:
    ```bash
    npm install
    ```
 
-8. **Build frontend assets** (for production):
+9. **Build frontend assets** (for production):
    ```bash
    npm run build
    ```
@@ -93,10 +121,10 @@ This project already includes Laravel Sanctum for API authentication. The follow
 
 ### 1. Install Laravel Sanctum
 
-Sanctum is already included in `composer.json`. If you need to install it manually:
+Run the following command;
 
 ```bash
-composer require laravel/sanctum
+php artisan api:install
 ```
 
 ### 2. Publish Sanctum Configuration
@@ -135,15 +163,7 @@ class User extends Authenticatable
 
 Sanctum middleware is already configured in `bootstrap/app.php`. The `EnsureFrontendRequestsAreStateful` middleware is applied to API routes.
 
-### 6. Configure Stateful Domains (Optional)
-
-If you're building a SPA (Single Page Application), configure stateful domains in `config/sanctum.php` or your `.env` file:
-
-```env
-SANCTUM_STATEFUL_DOMAINS=localhost,localhost:3000,127.0.0.1:8000
-```
-
-### 7. API Routes
+### 6. API Routes
 
 The project includes example API routes in `routes/api.php`:
 
@@ -160,39 +180,7 @@ Start the Laravel development server:
 php artisan serve
 ```
 
-The application will be available at `http://localhost:8000`.
-
-### Frontend Development (with Vite)
-
-For frontend development with hot reloading:
-
-```bash
-npm run dev
-```
-
-This will start Vite in development mode. Access the application at `http://localhost:8000`.
-
-### Using Composer Scripts
-
-The project includes convenient composer scripts:
-
-**Full setup** (install dependencies, setup env, generate key, migrate, build assets):
-
-```bash
-composer run setup
-```
-
-**Development mode** (runs server, queue, logs, and vite concurrently):
-
-```bash
-composer run dev
-```
-
-**Run tests**:
-
-```bash
-composer run test
-```
+The application will be available at `http://127.0.0.1:8000`.
 
 ## API Usage Examples
 
@@ -202,7 +190,7 @@ composer run test
 curl -X POST http://localhost:8000/api/login \
   -H "Content-Type: application/json" \
   -d '{
-    "email": "user@example.com",
+    "email": "test@example.com",
     "password": "password"
   }'
 ```
@@ -213,8 +201,8 @@ Response:
 {
   "user": {
     "id": 1,
-    "name": "User Name",
-    "email": "user@example.com"
+    "name": "Test User",
+    "email": "test@example.com"
   },
   "token": "1|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 }
@@ -227,53 +215,92 @@ curl -X GET http://localhost:8000/api/me \
   -H "Authorization: Bearer YOUR_TOKEN_HERE"
 ```
 
-## About Laravel
+## Testing the API with Bruno
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Bruno is a modern, open-source API client that makes it easy to test your API endpoints. Follow these steps to test the Sanctum API:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 1. Install Bruno
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Download and install Bruno from [https://www.usebruno.com](https://www.usebruno.com) or use your preferred package manager:
 
-## Learning Laravel
+```bash
+# macOS (using Homebrew)
+brew install --cask bruno
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+# Or download directly from the website if you're on Windows
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 2. Create a New Collection
 
-## Laravel Sponsors
+1. Open Bruno
+2. Click **"New Collection"** or **"Create Collection"**
+3. Name it "Laravel Sanctum API" (or any name you prefer)
+4. Set the base URL to: `http://127.0.0.1:8000/api`
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 3. Create Environment Variables (Optional but Recommended)
 
-### Premium Partners
+1. In your Bruno collection, go to **Environments**
+2. Create a new environment (e.g., "Local")
+3. Add the following variables:
+   - `base_url`: `http://127.0.0.1:8000/api`
+   - `token`: (leave empty, will be set after login)
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 4. Test the Login Endpoint
 
-## Contributing
+1. Create a new request in your collection
+2. Name it "Login"
+3. Set the method to **POST**
+4. Set the URL to: `{{base_url}}/login` (or `http://127.0.0.1:8000/api/login`)
+5. Go to the **Body** tab and select **JSON**
+6. Add the following JSON body (using the test user created in step 7 of setup):
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+   ```json
+   {
+     "email": "test@example.com",
+     "password": "password"
+   }
+   ```
 
-## Code of Conduct
+7. Click **Send**
+8. You should receive a response with the user data and token:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+   ```json
+   {
+     "user": {
+       "id": 1,
+       "name": "Test User",
+       "email": "test@example.com"
+     },
+     "token": "1|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+   }
+   ```
 
-## Security Vulnerabilities
+9. **Save the token**: Copy the token from the response. You'll need it for authenticated requests.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 5. Test the Protected Route (/me)
 
-## License
+1. Create a new request in your collection
+2. Name it "Get Current User"
+3. Set the method to **GET**
+4. Set the URL to: `{{base_url}}/me` (or `http://127.0.0.1:8000/api/me`)
+5. Go to the **Headers** tab
+6. Add a new header:
+   - **Key**: `Authorization`
+   - **Value**: `Bearer YOUR_TOKEN_HERE` (replace `YOUR_TOKEN_HERE` with the token from the login response)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+   Alternatively, if you set up environment variables, you can use:
+   - **Key**: `Authorization`
+   - **Value**: `Bearer {{token}}`
+
+7. Click **Send**
+8. You should receive the authenticated user's data:
+
+   ```json
+   {
+     "data": {
+       "id": 1,
+       "name": "Test User",
+       "email": "test@example.com"
+     }
+   }
+   ```
