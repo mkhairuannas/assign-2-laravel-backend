@@ -98,15 +98,6 @@ Before you begin, ensure you have the following installed on your system:
 
    Exit Tinker by typing `exit` or pressing `Ctrl+D`.
 
-8. **Install Node.js dependencies**:
-   ```bash
-   npm install
-   ```
-
-9. **Build frontend assets** (for production):
-   ```bash
-   npm run build
-   ```
 
 ## Laravel Sanctum Setup
 
