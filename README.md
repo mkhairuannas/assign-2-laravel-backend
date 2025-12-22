@@ -10,9 +10,10 @@ Before you begin, ensure you have the following installed on your system:
 
 ### Installation Steps
 
-1. **Clone the repository** (if applicable) or navigate to the project directory:
+1. **Clone the repository** and navigate to the project directory:
    ```bash
-   cd sanctum
+   git clone https://github.com/uzzairatinvoke/sanctum-demo.git
+   cd sanctum-demo
    ```
 
 2. **Install PHP dependencies**:
@@ -33,9 +34,6 @@ Before you begin, ensure you have the following installed on your system:
    APP_KEY=
    APP_DEBUG=true
    APP_URL=http://localhost
-
-   DB_CONNECTION=sqlite
-   DB_DATABASE=database/database.sqlite
    ```
 
 4. **Generate application key**:
