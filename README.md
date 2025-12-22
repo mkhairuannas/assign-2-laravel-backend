@@ -43,12 +43,6 @@ Before you begin, ensure you have the following installed on your system:
 
 5. **Configure your database**:
 
-   For **SQLite** (default):
-
-   ```bash
-   touch database/database.sqlite
-   ```
-
    For **MySQL** or **PostgreSQL**, update your `.env` file:
     
    ```env
