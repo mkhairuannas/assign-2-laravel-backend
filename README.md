@@ -6,7 +6,6 @@ Before you begin, ensure you have the following installed on your system:
 
 - **PHP** >= 8.2
 - **Composer** (PHP dependency manager)
-- **Node.js** and **npm** (for frontend assets)
 - **Database** (MySQL, PostgreSQL, or SQLite)
 
 ### Installation Steps
