@@ -44,8 +44,9 @@ Before you begin, ensure you have the following installed on your system:
 5. **Configure your database**:
 
    For **MySQL** or **PostgreSQL**, update your `.env` file:
-    
+
    ```env
+   # if you're a using dbngin 'postgres' is the default database username and password
    # for mysql
    DB_CONNECTION=mysql
    DB_HOST=127.0.0.1
@@ -56,6 +57,7 @@ Before you begin, ensure you have the following installed on your system:
    ```
 
    ```env
+   # if you're a using dbngin 'postgres' is the default database username and password
    # for postgresql
    DB_CONNECTION=pgsql
    DB_HOST=127.0.0.1
