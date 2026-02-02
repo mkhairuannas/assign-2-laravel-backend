@@ -7,13 +7,24 @@ meta {
 post {
   url: {{base_url}}/login
   body: json
-  auth: inherit
+  auth: none
+}
+
+headers {
+  Accept: application/json
 }
 
 body:json {
   {
     "email": "test@example.com",
     "password": "password"
+  }
+}
+
+script:post-response {
+  const data = res.getBody();
+  if (data.token) {
+    bru.setEnvVar("token", data.token);
   }
 }
 
